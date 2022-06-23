@@ -1,6 +1,35 @@
 const router = require('express').Router();
+const { json } = require('express/lib/response');
 // add models here
 // const { Gallery, Painting } = require('../models');
+const { getQuotes } = require("../utils/helpers")
+// RENDER THE PAGE THEY MADE
+const symbols = ["AAPL", "MSFT"]
+router.get('/', async (req, res) => {
+    try {
+        const latestStocks = await getQuotes(symbols)
+        //     include: [
+        //         {
+        //             model: Painting,
+        //             attributes: ['filename', 'description'],
+        //         },
+        //     ],
+        // });
+
+        // const galleries = dbGalleryData.map((gallery) =>
+        //     gallery.get({ plain: true })
+        // );
+        console.log(latestStocks)
+
+        res.render('homepage', {
+            latestStocks: JSON.stringify(latestStocks),
+            loggedIn: req.session.loggedIn,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
 
 // GET all galleries for homepage
 // router.get('/', async (req, res) => {

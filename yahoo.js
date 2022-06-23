@@ -16,7 +16,7 @@ var SYMBOLS = [
     'AAPL',
     'AMZN',
     'GOOGL',
-    'YHOO',
+    'MSFT',
     'TSLA',
 ];
 const today = moment().format("YYYY-MM-DD")
@@ -24,6 +24,8 @@ console.log(today)
 const since = moment().subtract(1, "days");
 const yesterday = moment(since).format("YYYY-MM-DD")
 console.log("THIS IS YESTERDAY: " + yesterday)
+
+
 yahooFinance.historical({
     symbols: SYMBOLS,
     from: yesterday,
