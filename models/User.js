@@ -36,7 +36,7 @@ User.init({
 },
     {
         hooks: {
-            async beforeCreate(newUserData) {
+            beforeCreate: async (newUserData) => {
                 newUserData.password = await bcrypt.hash(newUserData.password, 10);
                 return newUserData;
             },
@@ -46,5 +46,6 @@ User.init({
         freezeTableName: true,
         underscored: true,
         modelName: 'user',
-    }
-);
+
+    });
+module.exports = User;
