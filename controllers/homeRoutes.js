@@ -1,6 +1,26 @@
 const router = require('express').Router();
 const { User } = require('../models');
 const withAuth = require('../utils/auth');
+const { json } = require('express/lib/response');
+// add models here
+// const { Gallery, Painting } = require('../models');
+const { getQuotes } = require("../utils/helpers")
+// RENDER THE PAGE THEY MADE
+const symbols = ["AAPL", "MSFT"]
+// router.get('/', async (req, res) => {
+//   try {
+//     const latestStocks = await getQuotes(symbols)
+//     console.log(latestStocks)
+
+//     res.render('homepage', {
+//       latestStocks: JSON.stringify(latestStocks),
+//       loggedIn: req.session.loggedIn,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// })
 
 router.get('/', withAuth, async (req, res) => {
   try {
@@ -9,10 +29,11 @@ router.get('/', withAuth, async (req, res) => {
       order: [['name', 'ASC']],
     });
 
-    const users = userData.map((project) => project.get({ plain: true }));
+    const latestStocks = await getQuotes(symbols)
+    console.log(latestStocks)
 
     res.render('homepage', {
-      users,
+      latestStocks: JSON.stringify(latestStocks),
       logged_in: req.session.logged_in,
     });
   } catch (err) {
