@@ -1,3 +1,3 @@
-const Word = require("./User");
+const user = require("./User");
 
 module.exports = { User };
