@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" 
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+</head>
+
+<body>
+   <header>  <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<a class="navbar-brand" href="#">Navbar w/ text</a>
+ <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Contact Us</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      Navbar text with an inline element
+    </span>
+  </div>
+  </nav>
+{{!{{#if loggedIn}} 
+  <div>
+  <button type="button" class="btn btn-primary btn-sm" id="login">Login</button>
+<button type="button" class="btn btn-secondary btn-sm" id="register">Register</button>
+</div>
+{{!{{else}}
+ {{!<button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
+ {{!{{/if}}}}
+</header> 
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</body>
+</html>
