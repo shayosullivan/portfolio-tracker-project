@@ -43,7 +43,8 @@
 - User 
     - ID
     - Transactions
-    - 
+    - email
+    - password
 
 
 ### What will the views be?
