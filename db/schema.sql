@@ -1,2 +1,2 @@
-DROP DATABASE IF EXISTS words_db;
-CREATE DATABASE words_db;
+DROP DATABASE IF EXISTS tracker_db;
+CREATE DATABASE tracker_db;
