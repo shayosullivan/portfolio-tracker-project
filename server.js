@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+var moment = require('moment');
 
 const routes = require('./controllers');
 const sequelize = require('./config/connection');
@@ -34,17 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-var yahooFinance = require('yahoo-finance');
-
-yahooFinance.historical({
-    symbol: 'AAPL',
-    from: '2012-01-01',
-    to: '2012-12-31',
-    // period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
-}, function (err, quotes) {
-    //...
-    console.log(quotes)
-});
+const date = moment().format("YYYY-MM-DD")
+console.log(date)
 sequelize.sync({ force: false }).then(() => {
     app.listen(PORT, () => console.log('Now listening'));
 });
