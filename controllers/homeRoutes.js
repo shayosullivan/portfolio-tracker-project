@@ -29,8 +29,11 @@ router.get('/', withAuth, async (req, res) => {
       order: [['name', 'ASC']],
     });
 
+<<<<<<< HEAD
     const latestStocks = await getQuotes(symbols)
     console.log(latestStocks)
+=======
+>>>>>>> 6db3cb04f854968adcdb3534b5ef4a3e141c39cc
 
     res.render('homepage', {
       latestStocks: JSON.stringify(latestStocks),
