@@ -19,8 +19,31 @@ router.get('/', withAuth, async (req, res) => {
   }
 });
 
+router.get('/price', (req, res) => {
+  const symbol = req.query.symbol;
+  if (!symbol) {
+    return res.status(404).send('Not found');
+  }
+  yahooFinance.quote(
+    {
+      symbol: symbol,
+      modules: ['financialData'],
+    },
+    function (err, quotes) {
+      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
+        res.send({
+          symbol: symbol,
+          price: quotes.financialData.currentPrice,
+        });
+      } else {
+        return res.status(404).send('Not found');
+      }
+    }
+  );
+});
+
 router.get('/dashboard', async (req, res) => {
-  res.render('price');
+  res.render('dashboard');
 });
 
 router.get('/login', (req, res) => {
