@@ -7,7 +7,8 @@ router.get('/', async (req, res) => {
   res.render('homepage', {
     loggedIn: req.session.loggedIn
   })
-});
+}
+);
 
 router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;
