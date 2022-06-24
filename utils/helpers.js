@@ -62,10 +62,23 @@ function getQuotes(symbols) {
             //         console.log('N/A');
             //     }
             // });
-            console.log(result)
-            resolve(keyArr[0])
+            const formattedResult = []
+            for (let key in result) {
+                formattedResult.push({
+                    ticker: result[key][0].symbol,
+                    open: result[key][0].open,
+                    close: result[key][0].close,
+                    high: result[key][0].high,
+                    low: result[key][0].low,
+
+
+                })
+            }
+
+            resolve(formattedResult)
         });
     });
+    console.log("Promise: ", promise1)
     return promise1
 
 
