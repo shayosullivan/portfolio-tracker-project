@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const yahooFinance = require('yahoo-finance');
 const { User } = require('../models');
 const withAuth = require('../utils/auth');
 const { json } = require('express/lib/response');
@@ -10,9 +11,6 @@ const symbols = ["AAPL", "MSFT"]
 router.get('/', async (req, res) => {
   try {
     const latestStocks = await getQuotes(symbols)
-
-    console.log(latestStocks)
-    const ticker = latestStocks[0].ticker
 
     res.render('homepage', {
       latestStocks: JSON.stringify(latestStocks),
@@ -46,6 +44,33 @@ router.get('/', async (req, res) => {
 //     res.status(500).json(err);
 //   }
 // });
+
+router.get('/price', (req, res) => {
+  const symbol = req.query.symbol;
+  if (!symbol) {
+    return res.status(404).send('Not found');
+  }
+  yahooFinance.quote(
+    {
+      symbol: symbol,
+      modules: ['financialData'],
+    },
+    function (err, quotes) {
+      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
+        res.send({
+          symbol: symbol,
+          price: quotes.financialData.currentPrice,
+        });
+      } else {
+        return res.status(404).send('Not found');
+      }
+    }
+  );
+});
+
+router.get('/dashboard', async (req, res) => {
+  res.render('dashboard');
+});
 
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
