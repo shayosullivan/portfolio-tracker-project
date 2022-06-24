@@ -37,3 +37,28 @@ function addSymbol(symbol, shares) {
       addSymbolToChart(symbolData);
     });
 }
+
+function drawList() {
+  symbolList.innerHTML = '';
+  symbols.forEach((symbol) => {
+    const li = document.createElement('li');
+    li.innerText =
+      symbol.symbol +
+      ' ' +
+      symbol.shares +
+      ' x ' +
+      ' $' +
+      symbol.price +
+      ' = ' +
+      '$' +
+      round(symbol.price * symbol.shares);
+    symbolList.appendChild(li);
+  });
+}
+
+function addSymbolToChart(event) {
+  pieChart.data.labels.push(event.symbol);
+  pieChart.data.datasets[0].data.push(round(event.shares * event.price));
+  pieChart.data.datasets[0].backgroundColor.push(getRandomColor());
+  pieChart.update();
+}
