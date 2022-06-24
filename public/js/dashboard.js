@@ -5,7 +5,7 @@ const symbolList = document.getElementById('symbol-list');
 const symbols = [];
 
 const config = {
-  type: 'doughnut',
+  type: 'pie',
   data: {
     labels: [],
     datasets: [
@@ -18,6 +18,8 @@ const config = {
   },
   options: {},
 };
+
+const pieChart = new Chart(document.getElementById('chart'), config);
 
 addSymbolButton.addEventListener('click', () => {
   const symbolInputValue = symbolInput.value.toUpperCase();
