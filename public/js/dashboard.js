@@ -62,3 +62,16 @@ function addSymbolToChart(event) {
   pieChart.data.datasets[0].backgroundColor.push(getRandomColor());
   pieChart.update();
 }
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF'.split('');
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function round(value) {
+  return Math.round(value * 100) / 100;
+}
