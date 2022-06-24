@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const yahooFinance = require('yahoo-finance');
 const { User } = require('../models');
 const withAuth = require('../utils/auth');
 
@@ -9,8 +10,6 @@ router.get('/', withAuth, async (req, res) => {
       order: [['name', 'ASC']],
     });
 
-    const users = userData.map((project) => project.get({ plain: true }));
-
     res.render('homepage', {
       users,
       logged_in: req.session.logged_in,
@@ -18,6 +17,33 @@ router.get('/', withAuth, async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+router.get('/price', (req, res) => {
+  const symbol = req.query.symbol;
+  if (!symbol) {
+    return res.status(404).send('Not found');
+  }
+  yahooFinance.quote(
+    {
+      symbol: symbol,
+      modules: ['financialData'],
+    },
+    function (err, quotes) {
+      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
+        res.send({
+          symbol: symbol,
+          price: quotes.financialData.currentPrice,
+        });
+      } else {
+        return res.status(404).send('Not found');
+      }
+    }
+  );
+});
+
+router.get('/dashboard', async (req, res) => {
+  res.render('dashboard');
 });
 
 router.get('/login', (req, res) => {
