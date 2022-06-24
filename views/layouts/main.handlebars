@@ -27,15 +27,17 @@
           <a class="nav-link" href="#">Contact Us</a>
         </div>
       </div>
-      {{!{{#if loggedIn}}
       <div>
-        <button type="button" class="btn btn-primary btn-sm" id="login">Login</button>
+          {{#if loggedIn}}
+    <button type="button" id="logout" class="btn btn-primary btn-sm">Logout</button>
+    {{else}}
+    <button type="button" class="btn btn-primary btn-sm" id="login">Login</button>
+    {{!-- <a href="/login">Login</a> --}}
+    {{/if}}
         <button type="button" class="btn btn-secondary btn-sm" id="register">Register</button>
       </div>
-      {{!{{else}}
-      {{!<button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
-      {{!{{/if}}}}
     </nav>
+ 
   </header>
 
 
