@@ -18,3 +18,22 @@ const config = {
   },
   options: {},
 };
+
+addSymbolButton.addEventListener('click', () => {
+  const symbolInputValue = symbolInput.value.toUpperCase();
+  const sharesInputValue = +sharesInput.value;
+  addSymbol(symbolInputValue, sharesInputValue);
+  symbolInput.value = '';
+  sharesInput.value = '';
+});
+
+function addSymbol(symbol, shares) {
+  fetch('/price?symbol=' + symbol)
+    .then((response) => response.json())
+    .then((data) => {
+      const symbolData = { ...data, shares };
+      symbols.push(symbolData);
+      drawList();
+      addSymbolToChart(symbolData);
+    });
+}
