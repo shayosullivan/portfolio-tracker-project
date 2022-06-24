@@ -5,7 +5,7 @@ const symbolList = document.getElementById('symbol-list');
 const symbols = [];
 
 const config = {
-  type: 'pie',
+  type: 'doughnut',
   data: {
     labels: [],
     datasets: [
@@ -19,7 +19,8 @@ const config = {
   options: {},
 };
 
-const pieChart = new Chart(document.getElementById('chart'), config);
+
+const myChart = new Chart(document.getElementById('chart'), config);
 
 addSymbolButton.addEventListener('click', () => {
   const symbolInputValue = symbolInput.value.toUpperCase();
@@ -49,20 +50,19 @@ function drawList() {
       ' ' +
       symbol.shares +
       ' x ' +
-      ' $' +
       symbol.price +
-      ' = ' +
-      '$' +
-      round(symbol.price * symbol.shares);
+      '$ = ' +
+      round(symbol.price * symbol.shares) +
+      '$';
     symbolList.appendChild(li);
   });
 }
 
-function addSymbolToChart(event) {
-  pieChart.data.labels.push(event.symbol);
-  pieChart.data.datasets[0].data.push(round(event.shares * event.price));
-  pieChart.data.datasets[0].backgroundColor.push(getRandomColor());
-  pieChart.update();
+function addSymbolToChart(symbol) {
+  myChart.data.labels.push(symbol.symbol);
+  myChart.data.datasets[0].data.push(round(symbol.shares * symbol.price));
+  myChart.data.datasets[0].backgroundColor.push(getRandomColor());
+  myChart.update();
 }
 
 function getRandomColor() {
