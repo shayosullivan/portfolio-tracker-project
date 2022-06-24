@@ -25,27 +25,6 @@
           <a class='nav-link' id='about' href='#'>About</a>
           <a class='nav-link' id='contactus' href='#'>Contact Us</a>
         </div>
-<<<<<<< HEAD
-        {{!{{#if loggedIn}}
-        <div>
-          <button
-            type='button'
-            class='btn btn-primary btn-sm'
-            id='login'
-          >Login</button>
-          <button
-            type='button'
-            class='btn btn-secondary btn-sm'
-            id='register'
-          >Register</button>
-        </div>
-        {{!{{else}}
-        {{!<button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
-      {{!{{/if}}}}
-
-      </nav>
-    </header>
-=======
 
       </div>
       <div>
@@ -53,7 +32,7 @@
     <button type="button" id="logout" class="btn btn-primary btn-sm">Logout</button>
     {{else}}
     <button type="button" class="btn btn-primary btn-sm" id="login">Login</button>
-    {{!-- <a href="/login">Login</a> --}}
+    <a href="/login">Login</a>
     {{/if}}
         <button type="button" class="btn btn-secondary btn-sm" id="register">Register</button>
       </div>
@@ -62,7 +41,6 @@
   </header>
 
   {{{body}}}
->>>>>>> 340f2938fc1aeb7d301b8e9516cd3136a277c931
 
 
     {{!-- <script
