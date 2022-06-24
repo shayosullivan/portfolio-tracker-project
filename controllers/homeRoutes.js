@@ -3,23 +3,13 @@ const yahooFinance = require('yahoo-finance');
 const { User } = require('../models');
 const withAuth = require('../utils/auth');
 
-router.get('/', withAuth, async (req, res) => {
-  try {
-    const userData = await User.findAll({
-      attributes: { exclude: ['password'] },
-      order: [['name', 'ASC']],
-    });
-
-    res.render('homepage', {
-      users,
-      logged_in: req.session.logged_in,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
+router.get('/', async (req, res) => {
+  res.render('homepage', {
+    loggedIn: req.session.loggedIn
+  })
 });
 
-router.get('/price', (req, res) => {
+router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;
   if (!symbol) {
     return res.status(404).send('Not found');
@@ -42,7 +32,7 @@ router.get('/price', (req, res) => {
   );
 });
 
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', withAuth, async (req, res) => {
   res.render('dashboard');
 });
 
