@@ -25,53 +25,30 @@
           <a class='nav-link' id='about' href='#'>About</a>
           <a class='nav-link' id='contactus' href='#'>Contact Us</a>
         </div>
-<<<<<<< HEAD
-        {{!{{#if loggedIn}}
-        <div>
-          <button
-            type='button'
-            class='btn btn-primary btn-sm'
-            id='login'
-          >Login</button>
-          <button
-            type='button'
-            class='btn btn-secondary btn-sm'
-            id='register'
-          >Register</button>
-        </div>
-        {{!{{else}}
-        {{!<button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
-      {{!{{/if}}}}
-
-      </nav>
-    </header>
-=======
 
       </div>
       <div>
-   {{#if loggedIn}}
-    <button type="button" id="logout" class="btn btn-primary btn-sm">Logout</button>
-    {{else}}
-    <button type="button" class="btn btn-primary btn-sm" id="login">Login</button>
-    {{!-- <a href="/login">Login</a> --}}
-    {{/if}}
+        {{#if loggedIn}}
+        <button type="button" id="logout" class="btn btn-primary btn-sm">Logout</button>
+        {{else}}
+        {{!-- <button type="button" class="btn btn-primary btn-sm login-form" id="login">Login</button> --}}
+        <a href="/login">Login</a>
+        {{/if}}
         <button type="button" class="btn btn-secondary btn-sm" id="register">Register</button>
       </div>
     </nav>
- 
+
   </header>
 
   {{{body}}}
->>>>>>> 340f2938fc1aeb7d301b8e9516cd3136a277c931
 
 
-    {{!-- <script
-      src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js'
-      integrity='sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF'
-      crossorigin='anonymous'
-    ></script> --}}
-    </scirpt>
-  </body>
+  {{!--
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js'
+    integrity='sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF'
+    crossorigin='anonymous'></script> --}}
+  </scirpt>
+</body>
 
 
 </html>
