@@ -7,42 +7,45 @@ const { json } = require('express/lib/response');
 const { getQuotes } = require("../utils/helpers")
 // RENDER THE PAGE THEY MADE
 const symbols = ["AAPL", "MSFT"]
-// router.get('/', async (req, res) => {
-//   try {
-//     const latestStocks = await getQuotes(symbols)
-
-//     console.log(latestStocks)
-
-//     res.render('homepage', {
-//       latestStocks: JSON.stringify(latestStocks),
-//       loggedIn: req.session.loggedIn,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json(err);
-//   }
-// })
-
 router.get('/', async (req, res) => {
   try {
-    const userData = await User.findAll({
-      attributes: { exclude: ['password'] },
-      order: [['username', 'ASC']],
-    });
-
     const latestStocks = await getQuotes(symbols)
-    // const users = userData.map((project) => project.get({ plain: true }));
-    console.log("latest stocks from HomeRoutes: ", latestStocks)
+
+    console.log(latestStocks)
+    const ticker = latestStocks[0].ticker
 
     res.render('homepage', {
       latestStocks: JSON.stringify(latestStocks),
-      // users,
-      logged_in: req.session.logged_in,
+      ticker: JSON.stringify(ticker),
+      loggedIn: req.session.loggedIn,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
-});
+})
+
+// router.get('/', async (req, res) => {
+//   try {
+//     const userData = await User.findAll({
+//       attributes: { exclude: ['password'] },
+//       order: [['username', 'ASC']],
+//     });
+
+//     const latestStocks = await getQuotes(symbols)
+//     const users = userData.map((project) => project.get({ plain: true }));
+//     console.log("latest stocks from HomeRoutes: ", latestStocks)
+//     console.log("users from HomeRoutes: ", users)
+
+//     res.render('homepage', {
+//       latestStocks: JSON.stringify(latestStocks),
+//       users,
+//       logged_in: req.session.logged_in,
+//     });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
