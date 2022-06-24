@@ -10,6 +10,7 @@ const symbols = ["AAPL", "MSFT"]
 // router.get('/', async (req, res) => {
 //   try {
 //     const latestStocks = await getQuotes(symbols)
+
 //     console.log(latestStocks)
 
 //     res.render('homepage', {
@@ -22,21 +23,20 @@ const symbols = ["AAPL", "MSFT"]
 //   }
 // })
 
-router.get('/', withAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const userData = await User.findAll({
       attributes: { exclude: ['password'] },
-      order: [['name', 'ASC']],
+      order: [['username', 'ASC']],
     });
 
-<<<<<<< HEAD
     const latestStocks = await getQuotes(symbols)
-    console.log(latestStocks)
-=======
->>>>>>> 6db3cb04f854968adcdb3534b5ef4a3e141c39cc
+    // const users = userData.map((project) => project.get({ plain: true }));
+    console.log("latest stocks from HomeRoutes: ", latestStocks)
 
     res.render('homepage', {
       latestStocks: JSON.stringify(latestStocks),
+      // users,
       logged_in: req.session.logged_in,
     });
   } catch (err) {

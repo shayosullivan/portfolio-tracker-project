@@ -66,6 +66,7 @@ function getQuotes(symbols) {
             resolve(keyArr[0])
         });
     });
+    console.log("Promise: ", promise1)
     return promise1
 
 
