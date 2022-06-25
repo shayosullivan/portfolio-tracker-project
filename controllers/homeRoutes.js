@@ -6,8 +6,9 @@ const withAuth = require('../utils/auth');
 
 // router.get('/', async (req, res) => {
 //   res.render('homepage', {
-//     loggedIn: req.session.loggedIn
+//     logged_in: req.session.logged_in
 //   })
+<<<<<<< HEAD
 // });
 router.get('/', (req, res) => {
   let symbol;
@@ -39,6 +40,34 @@ router.get('/', (req, res) => {
   // res.send({
   //   resultsArr: resultsArr,
   // });
+=======
+// }
+// );
+
+router.get('/', async (req, res) => {
+  const symbol = 'SNAP';
+  yahooFinance.quote(
+    {
+      symbol: symbol,
+      modules: ['financialData'],
+    },
+    function (err, quotes) {
+      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
+        // res.send({
+        //   symbol: symbol,
+        //   price: quotes.financialData.currentPrice,
+        // });
+        res.render('homepage', {
+          symbol: symbol,
+          price: quotes.financialData.currentPrice,
+          logged_in: req.session.logged_in,
+        });
+      } else {
+        return res.status(404).send('Not found');
+      }
+    }
+  );
+>>>>>>> 7b8df3f0ca491dd421d255af8b015bc529489ea4
 });
 // Testing
 // router.get('/', async (req, res) => {
@@ -97,7 +126,7 @@ router.get('/dashboard', withAuth, async (req, res) => {
 
     res.render('dashboard', {
       ...user,
-      loggedIn: true,
+      logged_in: true,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -113,4 +142,12 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+router.get('/register', (req, res) => {
+  if (req.session.logged_in) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('register');
+});
 module.exports = router;
