@@ -1,7 +1,12 @@
 <h1>Take Charge of Your Financial Future</h1>
 <h4>Top Stocks of the Week</h4>
 <h4>Testing</h4>
-{{symbol}}{{price}}
+<div>
+    {{#each stocks as |stock|}}
+    <h1>{{stock.symbol}}</h1>
+    <h1>{{stock.price}}</h1>
+    {{/each}}
+</div>
 <!-- Market Stats -->
 <div class="uk-width-2-3@m">
     <div class="uk-card uk-card-default uk-card-body">
