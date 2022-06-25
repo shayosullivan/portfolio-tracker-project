@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const yahooFinance = require('yahoo-finance');
-const { User } = require('../models');
+const { User, Portfolio } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
   res.render('homepage', {
-    loggedIn: req.session.loggedIn
-  })
+    loggedIn: req.session.loggedIn,
+  });
 });
 
 router.get('/price', withAuth, (req, res) => {
@@ -33,7 +33,21 @@ router.get('/price', withAuth, (req, res) => {
 });
 
 router.get('/dashboard', withAuth, async (req, res) => {
-  res.render('dashboard');
+  try {
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+      include: [{ model: Portfolio }],
+    });
+
+    const user = userData.get({ plain: true });
+
+    res.render('dashboard', {
+      ...user,
+      loggedIn: true,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.get('/login', (req, res) => {
