@@ -8,39 +8,6 @@ const withAuth = require('../utils/auth');
 //   res.render('homepage', {
 //     logged_in: req.session.logged_in
 //   })
-<<<<<<< HEAD
-// });
-router.get('/', (req, res) => {
-  let symbol;
-  let symbols = ["AAPL", "AMZN", "GOOG"]
-  let stocks = []
-  for (let i = 0; i < symbols.length; i++) {
-    callApi(symbols[i], i)
-  }
-  function callApi(symbol, i) {
-    yahooFinance.quote(
-      {
-        symbol: symbol,
-        modules: ['financialData'],
-      },
-      function (err, quotes) {
-        if (quotes) {
-          const price = quotes.financialData.currentPrice
-          stocks.push({ "symbol": symbol, "price": price })
-          console.log("this is our data", stocks)
-          if (i === symbols.length - 1) {
-            res.render("homepage", { stocks })
-          }
-        } else {
-          return res.status(404).send('Not found');
-        }
-      }
-    );
-  }
-  // res.send({
-  //   resultsArr: resultsArr,
-  // });
-=======
 // }
 // );
 
@@ -67,7 +34,6 @@ router.get('/', async (req, res) => {
       }
     }
   );
->>>>>>> 7b8df3f0ca491dd421d255af8b015bc529489ea4
 });
 // Testing
 // router.get('/', async (req, res) => {
@@ -90,7 +56,7 @@ router.get('/', async (req, res) => {
 //   } else {
 //     return res.status(404).send('Not found');
 //   });
-// TESTING RANDOM 
+// TESTING RANDOM
 
 router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;
