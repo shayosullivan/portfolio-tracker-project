@@ -8,32 +8,37 @@ const withAuth = require('../utils/auth');
 //   res.render('homepage', {
 //     logged_in: req.session.logged_in
 //   })
-// }
-// );
-
-router.get('/', async (req, res) => {
-  const symbol = 'SNAP';
-  yahooFinance.quote(
-    {
-      symbol: symbol,
-      modules: ['financialData'],
-    },
-    function (err, quotes) {
-      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
-        // res.send({
-        //   symbol: symbol,
-        //   price: quotes.financialData.currentPrice,
-        // });
-        res.render('homepage', {
-          symbol: symbol,
-          price: quotes.financialData.currentPrice,
-          logged_in: req.session.logged_in,
-        });
-      } else {
-        return res.status(404).send('Not found');
+// });
+router.get('/', (req, res) => {
+  let symbol;
+  let symbols = ['AAPL', 'AMZN', 'GOOG'];
+  let stocks = [];
+  for (let i = 0; i < symbols.length; i++) {
+    callApi(symbols[i], i);
+  }
+  function callApi(symbol, i) {
+    yahooFinance.quote(
+      {
+        symbol: symbol,
+        modules: ['financialData'],
+      },
+      function (err, quotes) {
+        if (quotes) {
+          const price = quotes.financialData.currentPrice;
+          stocks.push({ symbol: symbol, price: price });
+          console.log('this is our data', stocks);
+          if (i === symbols.length - 1) {
+            res.render('homepage', { stocks });
+          }
+        } else {
+          return res.status(404).send('Not found');
+        }
       }
-    }
-  );
+    );
+  }
+  // res.send({
+  //   resultsArr: resultsArr,
+  // });
 });
 // Testing
 // router.get('/', async (req, res) => {
