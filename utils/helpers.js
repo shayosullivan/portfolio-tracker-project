@@ -8,41 +8,51 @@ require('colors');
 var _ = require('lodash');
 // THIS WORKS SUPER WELL!
 
-const symbols = [
-    'AAPL',
-    'AMZN',
-    'GOOGL',
-    'MSFT',
-    'TSLA',
-];
+module.exports = {
+    index_up_down: value => {
+        if (value > 0) {
+            return ('up')
+        } else {
+            return ('down')
+        }
+    }
+}
 
-function getQuotes(symbols) {
+// const symbols = [
+//     'AAPL',
+//     'AMZN',
+//     'GOOGL',
+//     'MSFT',
+//     'TSLA',
+// ];
 
-    const today = moment().format("YYYY-MM-DD")
-    const since = moment().subtract(1, "days");
-    const yesterday = moment(since).format("YYYY-MM-DD")
+// function getQuotes(symbols) {
 
-    const promise1 = new Promise((resolve, reject) => {
-        yahooFinance.historical({
-            symbols: symbols,
-            from: yesterday,
-            to: today,
-            period: 'd'
-        }, function (err, result) {
-            if (err) { throw err; }
-            const data = [
-                {
-                    "ticker": "AAPL",
-                    "date": "2022-06-22",
-                    "close": "135.350006"
-                },
+//     const today = moment().format("YYYY-MM-DD")
+//     const since = moment().subtract(1, "days");
+//     const yesterday = moment(since).format("YYYY-MM-DD")
 
-            ]
-            keyArr = []
-            for (let key in result) {
-                keyArr.push(key)
-            }
-            console.log(keyArr)
+//     const promise1 = new Promise((resolve, reject) => {
+//         yahooFinance.historical({
+//             symbols: symbols,
+//             from: yesterday,
+//             to: today,
+//             period: 'd'
+//         }, function (err, result) {
+//             if (err) { throw err; }
+//             const data = [
+//                 {
+//                     "ticker": "AAPL",
+//                     "date": "2022-06-22",
+//                     "close": "135.350006"
+//                 },
+
+//             ]
+//             keyArr = []
+//             for (let key in result) {
+//                 keyArr.push(key)
+//             }
+//             console.log(keyArr)
             // construct an object for each one of those keys
 
             // _.each(result, function (quotes, symbol) {
@@ -62,29 +72,29 @@ function getQuotes(symbols) {
             //         console.log('N/A');
             //     }
             // });
-            const formattedResult = []
-            for (let key in result) {
-                formattedResult.push({
-                    ticker: result[key][0].symbol,
-                    open: result[key][0].open,
-                    close: result[key][0].close,
-                    high: result[key][0].high,
-                    low: result[key][0].low,
+//             const formattedResult = []
+//             for (let key in result) {
+//                 formattedResult.push({
+//                     ticker: result[key][0].symbol,
+//                     open: result[key][0].open,
+//                     close: result[key][0].close,
+//                     high: result[key][0].high,
+//                     low: result[key][0].low,
 
 
-                })
-            }
+//                 })
+//             }
 
-            resolve(formattedResult)
-        });
-    });
-    console.log("Promise: ", promise1)
-    return promise1
+//             resolve(formattedResult)
+//         });
+//     });
+//     console.log("Promise: ", promise1)
+//     return promise1
 
 
-}
+// }
 
-module.exports = { getQuotes }
+// module.exports = { getQuotes }
 
 
 

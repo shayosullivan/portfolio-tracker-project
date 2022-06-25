@@ -3,10 +3,42 @@ const yahooFinance = require('yahoo-finance');
 const { User, Portfolio } = require('../models');
 const withAuth = require('../utils/auth');
 
+// router.get('/', async (req, res) => {
+//   res.render('homepage', {
+//     loggedIn: req.session.loggedIn
+//   })
+// }
+// );
+
 router.get('/', async (req, res) => {
+<<<<<<< HEAD
   res.render('homepage', {
     loggedIn: req.session.loggedIn,
   });
+=======
+  const symbol = "SNAP"
+  yahooFinance.quote(
+    {
+      symbol: symbol,
+      modules: ['financialData'],
+    },
+    function (err, quotes) {
+      if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
+        // res.send({
+        //   symbol: symbol,
+        //   price: quotes.financialData.currentPrice,
+        // });
+        res.render('homepage', {
+          symbol: symbol,
+          price: quotes.financialData.currentPrice,
+          loggedIn: req.session.loggedIn
+        })
+      } else {
+        return res.status(404).send('Not found');
+      }
+    }
+  );
+>>>>>>> e0266032c7a6865f981064bbc071da852743c8c4
 });
 
 router.get('/price', withAuth, (req, res) => {
