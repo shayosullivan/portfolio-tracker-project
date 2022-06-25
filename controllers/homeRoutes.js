@@ -11,7 +11,7 @@ const withAuth = require('../utils/auth');
 // );
 
 router.get('/', async (req, res) => {
-  const symbol = `["SNAP", "AAPL"]`
+  const symbol = "SNAP"
   yahooFinance.quote(
     {
       symbol: symbol,
@@ -19,10 +19,10 @@ router.get('/', async (req, res) => {
     },
     function (err, quotes) {
       if (quotes && quotes.financialData && quotes.financialData.currentPrice) {
-        res.send({
-          symbol: symbol,
-          price: quotes.financialData.currentPrice,
-        });
+        // res.send({
+        //   symbol: symbol,
+        //   price: quotes.financialData.currentPrice,
+        // });
         res.render('homepage', {
           symbol: symbol,
           price: quotes.financialData.currentPrice,
