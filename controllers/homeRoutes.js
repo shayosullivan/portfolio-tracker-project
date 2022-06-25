@@ -5,7 +5,7 @@ const withAuth = require('../utils/auth');
 
 // router.get('/', async (req, res) => {
 //   res.render('homepage', {
-//     loggedIn: req.session.loggedIn
+//     logged_in: req.session.logged_in
 //   })
 // }
 // );
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
         res.render('homepage', {
           symbol: symbol,
           price: quotes.financialData.currentPrice,
-          loggedIn: req.session.loggedIn,
+          logged_in: req.session.logged_in,
         });
       } else {
         return res.status(404).send('Not found');
@@ -69,7 +69,7 @@ router.get('/dashboard', withAuth, async (req, res) => {
 
     res.render('dashboard', {
       ...user,
-      loggedIn: true,
+      logged_in: true,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -86,7 +86,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  if (req.session.loggedIn) {
+  if (req.session.logged_in) {
     res.redirect('/');
     return;
   }
