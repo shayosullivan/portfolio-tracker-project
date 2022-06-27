@@ -4,15 +4,10 @@ const yahooFinance = require('yahoo-finance');
 const { User, Portfolio } = require('../models');
 const withAuth = require('../utils/auth');
 
-// router.get('/', async (req, res) => {
-//   res.render('homepage', {
-//     logged_in: req.session.logged_in
-//   })
-// });
 router.get('/', (req, res) => {
   let symbol;
-  let symbols = ['AAPL', 'AMZN', 'GOOG'];
-  let stocks = [];
+  let symbols = ["AAPL", "AMZN", "GOOG", "SNAP",]
+  let stocks = []
   for (let i = 0; i < symbols.length; i++) {
     callApi(symbols[i], i);
   }
@@ -24,9 +19,12 @@ router.get('/', (req, res) => {
       },
       function (err, quotes) {
         if (quotes) {
-          const price = quotes.financialData.currentPrice;
-          stocks.push({ symbol: symbol, price: price });
-          console.log('this is our data', stocks);
+          const price = quotes.financialData.currentPrice
+          const recommendationKey = quotes.financialData.recommendationKey
+          const ebitda = quotes.financialData.ebitda
+          console.log(quotes.financialData)
+          stocks.push({ "symbol": symbol, "price": price, "ebitda": ebitda, })
+          console.log("this is our data", stocks)
           if (i === symbols.length - 1) {
             res.render('homepage', { stocks });
           }
@@ -36,32 +34,7 @@ router.get('/', (req, res) => {
       }
     );
   }
-  // res.send({
-  //   resultsArr: resultsArr,
-  // });
 });
-// Testing
-// router.get('/', async (req, res) => {
-//   const stockArr = ["AAPL", "TSLA", "AMZN"]
-//   for (let i in stockArr) {
-//     console.log('i', i)
-//     yahooFinance.quote({
-//       symbol: stockArr[i],
-//       modules: ['price', 'summaryDetail']       // optional; default modules.
-//     }, function (err, quote) {
-//       console.log(quote);
-//     }
-//     );
-//   }
-//   if (quote && quote.financialData && quote.financialData.currentPrice) {
-//     res.send({
-//       symbol: symbol,
-//       price: quote.financialData.currentPrice,
-//     });
-//   } else {
-//     return res.status(404).send('Not found');
-//   });
-// TESTING RANDOM
 
 router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;
