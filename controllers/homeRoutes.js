@@ -9,6 +9,7 @@ const withAuth = require('../utils/auth');
 //     logged_in: req.session.logged_in
 //   })
 // });
+
 router.get('/', (req, res) => {
   let symbol;
   let symbols = ['AAPL', 'AMZN', 'GOOG'];
@@ -68,11 +69,25 @@ router.get('/dashboard', withAuth, async (req, res) => {
     });
 
     const user = userData.get({ plain: true });
+    console.log(user);
 
-    res.render('dashboard', {
-      ...user,
-      logged_in: true,
-    });
+    const addSymbol = async (symbol, shares) => {
+      if (symbol && shares) {
+        await fetch('/price?symbol=' + symbol)
+          .then((response) => response.json())
+          .then((data) => {
+            const symbolData = { ...data, shares };
+            symbols.push(symbolData);
+            drawList();
+            addSymbolToChart(symbolData);
+          });
+      }
+      res.render('dashboard', {
+        ...user,
+        logged_in: true,
+      });
+    };
+    addSymbol(user.stocks.symbol, user.stocks.shares);
   } catch (err) {
     res.status(500).json(err);
   }

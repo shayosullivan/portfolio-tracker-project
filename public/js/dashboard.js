@@ -31,7 +31,7 @@ addSymbolButton.addEventListener('click', () => {
 
 const addSymbol = async (symbol, shares) => {
   if (symbol && shares) {
-    fetch('/price?symbol=' + symbol)
+    await fetch('/price?symbol=' + symbol)
       .then((response) => response.json())
       .then((data) => {
         const symbolData = { ...data, shares };
@@ -48,11 +48,11 @@ const addSymbol = async (symbol, shares) => {
       },
     });
 
-    if (response.ok) {
-      document.location.replace(`/dashboard`);
-    } else {
-      alert('Failed to add stock to your portfolio');
-    }
+    // if (response.ok) {
+    //   document.location.replace(`/dashboard`);
+    // } else {
+    //   alert('Failed to add stock to your portfolio');
+    // }
   } else {
     alert('Please enter both symbol and shares');
   }
