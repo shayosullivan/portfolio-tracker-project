@@ -4,6 +4,31 @@ const yahooFinance = require('yahoo-finance');
 const { User, Portfolio } = require('../models');
 const withAuth = require('../utils/auth');
 
+// router.get('/', async (req, res) => {
+//   try {
+//     const userData = await User.findAll({
+//       attributes: { exclude: ['password'] },
+//       order: [['name', 'ASC']],
+//     });
+
+//     const users = userData.map((Portfolio) => Portfolio.get({ plain: true }));
+
+//     res.render('homepage', {
+//       users,
+//       logged_in: req.session.logged_in,
+//     });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+router.get('/login', (req, res) => {
+  if (req.session.logged_in) {
+    res.render('/');
+    return;
+  }
+  res.render('login');
+});
+
 router.get('/', (req, res) => {
   let symbol;
   let symbols = ["AAPL", "AMZN", "GOOG", "SNAP",]
@@ -26,7 +51,8 @@ router.get('/', (req, res) => {
           stocks.push({ "symbol": symbol, "price": price, "ebitda": ebitda, })
           console.log("this is our data", stocks)
           if (i === symbols.length - 1) {
-            res.render('homepage', { stocks });
+            res.render('homepage', { stocks, logged_in: req.session.logged_in});
+      
           }
         } else {
           return res.status(404).send('Not found');
@@ -77,14 +103,14 @@ router.get('/dashboard', withAuth, async (req, res) => {
   }
 });
 
-router.get('/login', (req, res) => {
-  if (req.session.logged_in) {
-    res.redirect('/');
-    return;
-  }
+// router.get('/login', (req, res) => {
+//   if (req.session.logged_in) {
+//     res.redirect('/');
+//     return;
+//   }
 
-  res.render('login');
-});
+//   res.render('login');
+// });
 
 router.get('/register', (req, res) => {
   if (req.session.logged_in) {
