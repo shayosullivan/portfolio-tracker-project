@@ -1,7 +1,8 @@
 const router = require('express').Router();
+const { response } = require('express');
 const { quote } = require('yahoo-finance');
 const yahooFinance = require('yahoo-finance');
-const { User, Portfolio } = require('../models');
+const { User, Stock } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/login', (req, res) => {
@@ -14,8 +15,8 @@ router.get('/login', (req, res) => {
 
 router.get('/', (req, res) => {
   let symbol;
-  let symbols = ["AAPL", "AMZN", "GOOG", "SNAP",]
-  let stocks = []
+  let symbols = ['AAPL', 'AMZN', 'GOOG', 'SNAP'];
+  let stocks = [];
   for (let i = 0; i < symbols.length; i++) {
     callApi(symbols[i], i);
   }
@@ -27,15 +28,22 @@ router.get('/', (req, res) => {
       },
       function (err, quotes) {
         if (quotes) {
-          const price = quotes.financialData.currentPrice
-          const recommendationKey = quotes.financialData.recommendationKey
-          const ebitda = quotes.financialData.ebitda
-          console.log(quotes.financialData)
-          stocks.push({ "symbol": symbol, "price": price, "ebitda": ebitda, })
-          console.log("this is our data", stocks)
+          const price = quotes.financialData.currentPrice;
+          const recommendationKey = quotes.financialData.recommendationKey;
+          const ebitda = quotes.financialData.ebitda;
+          console.log(quotes.financialData);
+          stocks.push({ symbol: symbol, price: price, ebitda: ebitda });
+          console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
+<<<<<<< HEAD
+            res.render('homepage', {
+              stocks,
+              logged_in: req.session.logged_in,
+            });
+=======
             res.render('homepage', { stocks, logged_in: req.session.logged_in});
       
+>>>>>>> 3fc1195208f27f8ae43c15c17a42f0e848ef4b1a
           }
         } else {
           return res.status(404).send('Not found');
@@ -68,17 +76,43 @@ router.get('/price', withAuth, (req, res) => {
   );
 });
 
+const addPriceToStock = async (stock) => {
+  const updatedStock = await new Promise((resolve, reject) => {
+    yahooFinance.quote(
+      {
+        symbol: stock.symbol,
+        modules: ['financialData'],
+      },
+      function (err, quotes) {
+        if (
+          quotes &&
+          quotes.financialData &&
+          quotes.financialData.currentPrice
+        ) {
+          stock.price = quotes.financialData.currentPrice;
+          resolve(stock);
+        } else {
+          reject('stock not found');
+        }
+      }
+    );
+  });
+  return await updatedStock;
+};
+
 router.get('/dashboard', withAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
-      include: [{ model: Portfolio }],
+      include: [{ model: Stock }],
     });
 
     const user = userData.get({ plain: true });
-
+    const stocks = await Promise.all(
+      user.stocks.map(async (stock) => await addPriceToStock(stock))
+    );
     res.render('dashboard', {
-      ...user,
+      stocks,
       logged_in: true,
     });
   } catch (err) {
@@ -94,4 +128,5 @@ router.get('/register', (req, res) => {
 
   res.render('register');
 });
+
 module.exports = router;

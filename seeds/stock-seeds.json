@@ -1,0 +1,12 @@
+[
+  {
+    "symbol": "AAPL",
+    "shares": "10",
+    "user_id": 1
+  },
+  {
+    "symbol": "GOOG",
+    "shares": "2",
+    "user_id": 1
+  }
+]

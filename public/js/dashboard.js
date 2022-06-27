@@ -19,7 +19,6 @@ const config = {
   options: {},
 };
 
-
 const myChart = new Chart(document.getElementById('chart'), config);
 
 addSymbolButton.addEventListener('click', () => {
@@ -30,31 +29,53 @@ addSymbolButton.addEventListener('click', () => {
   sharesInput.value = '';
 });
 
-function addSymbol(symbol, shares) {
-  fetch('/price?symbol=' + symbol)
-    .then((response) => response.json())
-    .then((data) => {
-      const symbolData = { ...data, shares };
-      symbols.push(symbolData);
-      drawList();
-      addSymbolToChart(symbolData);
+const addSymbol = async (symbol, shares) => {
+  if (symbol && shares) {
+    await fetch('/price?symbol=' + symbol)
+      .then((response) => response.json())
+      .then((data) => {
+        const symbolData = { ...data, shares };
+        symbols.push(symbolData);
+        drawList();
+        addSymbolToChart(symbolData);
+      });
+
+    const response = await fetch(`/api/stocks`, {
+      method: 'POST',
+      body: JSON.stringify({ symbol, shares }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-}
+
+    // if (response.ok) {
+    //   document.location.replace(`/dashboard`);
+    // } else {
+    //   alert('Failed to add stock to your portfolio');
+    // }
+  } else {
+    alert('Please enter both symbol and shares');
+  }
+};
 
 function drawList() {
   symbolList.innerHTML = '';
   symbols.forEach((symbol) => {
-    const li = document.createElement('li');
-    li.innerText =
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' +
       symbol.symbol +
-      ' ' +
+      '</td>' +
+      '<td>' +
       symbol.shares +
-      ' x ' +
+      '</td>' +
+      '<td>$' +
       symbol.price +
-      '$ = ' +
+      '</td>' +
+      '<td>$' +
       round(symbol.price * symbol.shares) +
-      '$';
-    symbolList.appendChild(li);
+      '</td>';
+    symbolList.appendChild(tr);
   });
 }
 
