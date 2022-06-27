@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
   let symbols = ["AAPL", "AMZN", "GOOG", "SNAP",]
   let stocks = []
   for (let i = 0; i < symbols.length; i++) {
-    callApi(symbols[i], i)
+    callApi(symbols[i], i);
   }
   function callApi(symbol, i) {
     yahooFinance.quote(
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
           stocks.push({ "symbol": symbol, "price": price, "ebitda": ebitda, })
           console.log("this is our data", stocks)
           if (i === symbols.length - 1) {
-            res.render("homepage", { stocks })
+            res.render('homepage', { stocks });
           }
         } else {
           return res.status(404).send('Not found');
