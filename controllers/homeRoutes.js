@@ -26,7 +26,6 @@ router.get('/', (req, res) => {
         if (quotes) {
           const price = quotes.financialData.currentPrice;
           stocks.push({ symbol: symbol, price: price });
-          console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
             res.render('homepage', { stocks, loggedIn: req.session.logged_in });
           }

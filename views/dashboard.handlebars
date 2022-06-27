@@ -1,14 +1,37 @@
-<div>
-  <input placeholder='symbol' id='symbol-input' />
-  <input placeholder='shares' type='number' id='shares-input' />
-  <button id='add-symbol-button'>add</button>
-</div>
-<div>
-  <ul id='symbol-list'>
-  </ul>
-</div>
-<div style='margin-top: 50px;'>
-  <canvas id='chart'></canvas>
+<div class='row'>
+  <div class='col-7 p-2'>
+    <div>
+      <input placeholder='symbol' id='symbol-input' />
+      <input placeholder='shares' type='number' id='shares-input' />
+      <button id='add-symbol-button'>add</button>
+    </div>
+    <div>
+      <ul>
+      </ul>
+    </div>
+    <table class='table'>
+      <thead class='thead-dark'>
+        <tr>
+          <th scope='col'>Stock</th>
+          <th scope='col'>Shares</th>
+          <th scope='col'>Price</th>
+          <th scope='col'>Value</th>
+        </tr>
+      </thead>
+      <tbody id='symbol-list'>
+      </tbody>
+    </table>
+  </div>
+
+  <div class='col-1 p-2'>
+
+  </div>
+
+  <div class='col-3 p-2'>
+    <div style='margin-top: 32px;'>
+      <canvas id='chart'></canvas>
+    </div>
+  </div>
 </div>
 
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
