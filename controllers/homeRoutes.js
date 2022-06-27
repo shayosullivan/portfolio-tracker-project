@@ -35,15 +35,10 @@ router.get('/', (req, res) => {
           stocks.push({ symbol: symbol, price: price, ebitda: ebitda });
           console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
-<<<<<<< HEAD
             res.render('homepage', {
               stocks,
               logged_in: req.session.logged_in,
             });
-=======
-            res.render('homepage', { stocks, logged_in: req.session.logged_in});
-      
->>>>>>> 3fc1195208f27f8ae43c15c17a42f0e848ef4b1a
           }
         } else {
           return res.status(404).send('Not found');
@@ -90,6 +85,7 @@ const addPriceToStock = async (stock) => {
           quotes.financialData.currentPrice
         ) {
           stock.price = quotes.financialData.currentPrice;
+          stock.total = round(quotes.financialData.currentPrice * stock.shares);
           resolve(stock);
         } else {
           reject('stock not found');
@@ -128,5 +124,9 @@ router.get('/register', (req, res) => {
 
   res.render('register');
 });
+
+function round(value) {
+  return Math.round(value * 100) / 100;
+}
 
 module.exports = router;
