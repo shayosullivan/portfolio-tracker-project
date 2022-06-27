@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { response } = require('express');
 const { quote } = require('yahoo-finance');
 const yahooFinance = require('yahoo-finance');
 const { User, Stock } = require('../models');
@@ -26,7 +27,10 @@ router.get('/', (req, res) => {
           stocks.push({ symbol: symbol, price: price, ebitda: ebitda });
           console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
-            res.render('homepage', { stocks, loggedIn: req.session.logged_in });
+            res.render('homepage', {
+              stocks,
+              logged_in: req.session.logged_in,
+            });
           }
         } else {
           return res.status(404).send('Not found');
@@ -35,27 +39,6 @@ router.get('/', (req, res) => {
     );
   }
 });
-
-function drawList() {
-  symbolList.innerHTML = '';
-  symbols.forEach((symbol) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td>' +
-      symbol.symbol +
-      '</td>' +
-      '<td>' +
-      symbol.shares +
-      '</td>' +
-      '<td>$' +
-      symbol.price +
-      '</td>' +
-      '<td>$' +
-      round(symbol.price * symbol.shares) +
-      '</td>';
-    symbolList.appendChild(tr);
-  });
-}
 
 router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;
@@ -80,6 +63,30 @@ router.get('/price', withAuth, (req, res) => {
   );
 });
 
+const addPriceToStock = async (stock) => {
+  const updatedStock = await new Promise((resolve, reject) => {
+    yahooFinance.quote(
+      {
+        symbol: stock.symbol,
+        modules: ['financialData'],
+      },
+      function (err, quotes) {
+        if (
+          quotes &&
+          quotes.financialData &&
+          quotes.financialData.currentPrice
+        ) {
+          stock.price = quotes.financialData.currentPrice;
+          resolve(stock);
+        } else {
+          reject('stock not found');
+        }
+      }
+    );
+  });
+  return await updatedStock;
+};
+
 router.get('/dashboard', withAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.session.user_id, {
@@ -88,25 +95,13 @@ router.get('/dashboard', withAuth, async (req, res) => {
     });
 
     const user = userData.get({ plain: true });
-    console.log(user);
-
-    const addSymbol = async (symbol, shares) => {
-      if (symbol && shares) {
-        await fetch('/price?symbol=' + symbol)
-          .then((response) => response.json())
-          .then((data) => {
-            const symbolData = { ...data, shares };
-            symbols.push(symbolData);
-            drawList();
-            addSymbolToChart(symbolData);
-          });
-      }
-      res.render('dashboard', {
-        ...user,
-        logged_in: true,
-      });
-    };
-    addSymbol(user.stocks.symbol, user.stocks.shares);
+    const stocks = await Promise.all(
+      user.stocks.map(async (stock) => await addPriceToStock(stock))
+    );
+    res.render('dashboard', {
+      stocks,
+      logged_in: true,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -129,4 +124,5 @@ router.get('/register', (req, res) => {
 
   res.render('register');
 });
+
 module.exports = router;
