@@ -1,7 +1,12 @@
 [
   {
-    "title": "FDA Orders Juul to Stop Selling in the US",
-    "content": "The US Food and Drug Administration on Thursday issued marketing denial orders to Juul Labs for all of the company's products currently marketed in the US.",
+    "symbol": "AAPL",
+    "shares": "10",
+    "user_id": 1
+  },
+  {
+    "symbol": "GOOG",
+    "shares": "2",
     "user_id": 1
   }
 ]
