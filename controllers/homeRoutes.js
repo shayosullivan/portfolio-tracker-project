@@ -4,15 +4,9 @@ const yahooFinance = require('yahoo-finance');
 const { User, Stock } = require('../models');
 const withAuth = require('../utils/auth');
 
-// router.get('/', async (req, res) => {
-//   res.render('homepage', {
-//     logged_in: req.session.logged_in
-//   })
-// });
-
 router.get('/', (req, res) => {
   let symbol;
-  let symbols = ['AAPL', 'AMZN', 'GOOG'];
+  let symbols = ['AAPL', 'AMZN', 'GOOG', 'SNAP'];
   let stocks = [];
   for (let i = 0; i < symbols.length; i++) {
     callApi(symbols[i], i);
@@ -26,7 +20,11 @@ router.get('/', (req, res) => {
       function (err, quotes) {
         if (quotes) {
           const price = quotes.financialData.currentPrice;
-          stocks.push({ symbol: symbol, price: price });
+          const recommendationKey = quotes.financialData.recommendationKey;
+          const ebitda = quotes.financialData.ebitda;
+          console.log(quotes.financialData);
+          stocks.push({ symbol: symbol, price: price, ebitda: ebitda });
+          console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
             res.render('homepage', { stocks, loggedIn: req.session.logged_in });
           }
@@ -37,6 +35,27 @@ router.get('/', (req, res) => {
     );
   }
 });
+
+function drawList() {
+  symbolList.innerHTML = '';
+  symbols.forEach((symbol) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' +
+      symbol.symbol +
+      '</td>' +
+      '<td>' +
+      symbol.shares +
+      '</td>' +
+      '<td>$' +
+      symbol.price +
+      '</td>' +
+      '<td>$' +
+      round(symbol.price * symbol.shares) +
+      '</td>';
+    symbolList.appendChild(tr);
+  });
+}
 
 router.get('/price', withAuth, (req, res) => {
   const symbol = req.query.symbol;

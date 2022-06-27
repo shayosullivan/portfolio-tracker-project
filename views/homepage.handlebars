@@ -1,49 +1,40 @@
-<h1>Take Charge of Your Financial Future</h1>
-<h4>Top Stocks of the Week</h4>
-<h4>Testing</h4>
-<div>
-    {{#each stocks as |stock|}}
-    <h1>{{stock.symbol}}</h1>
-    <h1>{{stock.price}}</h1>
-    {{/each}}
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-interval="2000">
+            <img class="d-block w-100" src="./frame17.png" alt="First slide">
+        </div>
+        <div class="carousel-item" data-interval="2000">
+            <img class="d-block w-100" src="./frame16.png" alt="Second slide">
+        </div>
+        <div class="carousel-item" data-interval="2000">
+            <img class="d-block w-100" src="./frame15.png" alt="Third slide">
+        </div>
+    </div>
 </div>
+
 <!-- Market Stats -->
 <div class="uk-width-2-3@m">
     <div class="uk-card uk-card-default uk-card-body">
-        <h2 class="uk-text-center uk-text-large"><i class="fas fa-chart-area"></i> Market Indexes</h2>
-        <table class="uk-table uk-table-divider">
+        <h2 class="uk-text-center uk-text-large"><i class="fas fa-chart-area"></i>Folio Stock Picks of the Week</h2>
+        <table class="uk-table uk-table-divider table table-dark">
             <thead>
                 <tr>
-                    <th>Index</th>
-                    <th>Weighted Value</th>
-                    <th>Market Movement</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>EBITDA</th>
+
+
                 </tr>
             </thead>
             <tbody>
+                {{#each stocks as |stock|}}
                 <tr>
-                    <td>Dow Jones</td>
-                    <td>{{DJI}}</td>
-                    <td class="index-{{index_up_down DJIDelta}}"><i class="fas fa-caret-{{index_up_down DJIDelta}}"></i>
-                        {{DJIDelta}}%</td>
+                    <td>{{stock.symbol}}</td>
+                    <td>{{stock.price}}</td>
+                    <td>{{stock.ebitda}}</td>
+
                 </tr>
-                <tr>
-                    <td>Nasdaq</td>
-                    <td>{{IXIC}}</td>
-                    <td class="index-{{index_up_down IXICDelta}}"><i
-                            class="fas fa-caret-{{index_up_down IXICDelta}}"></i> {{IXICDelta}}%</td>
-                </tr>
-                <tr>
-                    <td>S&P 500</td>
-                    <td>{{GSPC}}</td>
-                    <td class="index-{{index_up_down SPDelta}}"><i class="fas fa-caret-{{index_up_down SPDelta}}"></i>
-                        {{SPDelta}}%</td>
-                </tr>
-                <tr>
-                    <td>Russell 2000</td>
-                    <td>{{RUT}}</td>
-                    <td class="index-{{index_up_down RUTDelta}}"><i class="fas fa-caret-{{index_up_down RUTDelta}}"></i>
-                        {{RUTDelta}}%</td>
-                </tr>
+                {{/each}}
             </tbody>
         </table>
 
