@@ -35,14 +35,19 @@ reduceSymbolButton.addEventListener('click', () => {
         sharesUpdate =
           parseInt(sharesInputValue) +
           parseInt(symbolList.children[i].children[1].innerHTML);
-        console.log('Symbol: ', symbolInputValue);
-        console.log('Shares: ', sharesUpdate);
-        console.log('Id: ', symbolList.children[i].children[4].innerHTML);
-        updateSymbol(
-          symbolInputValue,
-          sharesUpdate,
-          symbolList.children[i].children[4].innerHTML
-        );
+        if (sharesUpdate < 0) {
+          alert(
+            `You don't have enough shares to sell. \nYou only have ${symbolList.children[i].children[1].innerHTML} shares in your portfolio.`
+          );
+        } else if (sharesUpdate === 0) {
+          deleteSymbol(symbolList.children[i].children[4].innerHTML);
+        } else {
+          updateSymbol(
+            symbolInputValue,
+            sharesUpdate,
+            symbolList.children[i].children[4].innerHTML
+          );
+        }
       }
     }
   } else {
@@ -65,9 +70,6 @@ addSymbolButton.addEventListener('click', () => {
         sharesUpdate =
           parseInt(sharesInputValue) +
           parseInt(symbolList.children[i].children[1].innerHTML);
-        console.log('Symbol: ', symbolInputValue);
-        console.log('Shares: ', sharesUpdate);
-        console.log('Id: ', symbolList.children[i].children[4].innerHTML);
         updateSymbol(
           symbolInputValue,
           sharesUpdate,
@@ -81,6 +83,15 @@ addSymbolButton.addEventListener('click', () => {
   symbolInput.value = '';
   sharesInput.value = '';
 });
+
+const deleteSymbol = async (id) => {
+  const response = await fetch(`/api/stocks/${id}`, {
+    method: 'DELETE',
+  });
+  if (response.ok) {
+    window.location.replace('/dashboard');
+  }
+};
 
 const updateSymbol = async (symbol, shares, id) => {
   if (symbol && shares) {
