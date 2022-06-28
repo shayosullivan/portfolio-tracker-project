@@ -1,4 +1,3 @@
-
 const name = document.getElementById("name");
 const email = document.getElementById("email");
 const message = document.getElementById("message");
@@ -20,14 +19,14 @@ function contactUs() {
         message: message 
     }
 
-    let user_data_str = JSON.stringify(user_data);
+    let message_data_str = JSON.stringify(message_data);
 
-    let clientsArr = JSON.parse(localStorage.getItem('users')) || [];
+    let clientsArr = JSON.parse(localStorage.getItem('message')) || [];
 
 
-    clientsArr.push(user_data);
+    clientsArr.push(message_data);
 
-    localStorage.setItem("users", JSON.stringify(clientsArr));
+    localStorage.setItem("message", JSON.stringify(clientsArr));
     return alert("Email Sent!");
 
 }
