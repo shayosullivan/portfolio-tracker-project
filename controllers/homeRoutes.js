@@ -13,6 +13,12 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+router.get('/about', withAuth, (req, res) => {
+  res.render('about', {
+    logged_in: true,
+  });
+});
+
 router.get('/', (req, res) => {
   let symbol;
   let symbols = ['AAPL', 'AMZN', 'GOOG', 'SNAP'];
