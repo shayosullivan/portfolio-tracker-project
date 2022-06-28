@@ -1,3 +1,4 @@
+// const items = document.querySelector("li")
 const addSymbolButton = document.getElementById('add-symbol-button');
 const symbolInput = document.getElementById('symbol-input');
 const sharesInput = document.getElementById('shares-input');
@@ -30,6 +31,34 @@ addSymbolButton.addEventListener('click', () => {
   sharesInput.value = '';
 });
 
+
+// THE FUNCTION BELOW ALLOWS US TO ADD DELETE BUTTONS TO OTHER ELEMENTS
+function appendDeleteBtnTo(element) {
+  var deleteButton = document.createElement("button");
+  deleteButton.innerHTML = "Delete";
+  deleteButton.classList.add("delete");
+  deleteButton.addEventListener("click", listItemClickHandler);
+  element.appendChild(deleteButton);
+}
+
+
+
+// FUNCTION FOR TO BE USED IN THE EVENT HANDLER TO DELETE THE NEAREST LIST ITEM
+function listItemClickHandler(e) {
+  const li = e.target.closest('li');
+
+  if (!li) return;
+
+  if (e.target.matches('.delete')) {
+    li.remove();
+  } else {
+    return;
+  }
+}
+
+// FUNCTION THAT ALLOWS US TO LISTEN TO CLICKS ON A DELETE BUTTON
+// items.addEventListener("click", listItemClickHandler);
+
 function addSymbol(symbol, shares) {
   fetch('/price?symbol=' + symbol)
     .then((response) => response.json())
@@ -54,9 +83,13 @@ function drawList() {
       '$ = ' +
       round(symbol.price * symbol.shares) +
       '$';
+    appendDeleteBtnTo(li)
+
     symbolList.appendChild(li);
   });
 }
+
+
 
 function addSymbolToChart(symbol) {
   myChart.data.labels.push(symbol.symbol);
