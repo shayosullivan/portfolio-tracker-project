@@ -1,5 +1,6 @@
 // const items = document.querySelector("li")
 const addSymbolButton = document.getElementById('add-symbol-button');
+const reduceSymbolButton = document.getElementById('reduce-symbol-button');
 const symbolInput = document.getElementById('symbol-input');
 const sharesInput = document.getElementById('shares-input');
 const symbolList = document.getElementById('symbol-list');
@@ -20,83 +21,121 @@ const config = {
   options: {},
 };
 
-
 const myChart = new Chart(document.getElementById('chart'), config);
+
+reduceSymbolButton.addEventListener('click', () => {
+  const symbolInputValue = symbolInput.value.toUpperCase();
+  const sharesInputValue = sharesInput.value * -1;
+  symbols.value = '';
+  for (let i = 0; i < symbolList.children.length; i++) {
+    symbols.push(symbolList.children[i].children[0].innerHTML);
+  }
+  if (symbols.includes(symbolInputValue)) {
+    for (let i = 0; i < symbolList.children.length; i++) {
+      if (symbolInputValue == symbolList.children[i].children[0].innerHTML) {
+        sharesUpdate =
+          parseInt(sharesInputValue) +
+          parseInt(symbolList.children[i].children[1].innerHTML);
+        if (sharesUpdate < 0) {
+          alert(
+            `You don't have enough shares to sell. \nYou only have ${symbolList.children[i].children[1].innerHTML} shares in your portfolio.`
+          );
+        } else if (sharesUpdate === 0) {
+          deleteSymbol(symbolList.children[i].children[4].innerHTML);
+        } else {
+          updateSymbol(
+            symbolInputValue,
+            sharesUpdate,
+            symbolList.children[i].children[4].innerHTML
+          );
+        }
+      }
+    }
+  } else {
+    addSymbol(symbolInputValue, sharesInputValue);
+  }
+  symbolInput.value = '';
+  sharesInput.value = '';
+});
 
 addSymbolButton.addEventListener('click', () => {
   const symbolInputValue = symbolInput.value.toUpperCase();
-  const sharesInputValue = +sharesInput.value;
-  addSymbol(symbolInputValue, sharesInputValue);
+  const sharesInputValue = sharesInput.value;
+  symbols.value = '';
+  for (let i = 0; i < symbolList.children.length; i++) {
+    symbols.push(symbolList.children[i].children[0].innerHTML);
+  }
+  if (symbols.includes(symbolInputValue)) {
+    for (let i = 0; i < symbolList.children.length; i++) {
+      if (symbolInputValue == symbolList.children[i].children[0].innerHTML) {
+        sharesUpdate =
+          parseInt(sharesInputValue) +
+          parseInt(symbolList.children[i].children[1].innerHTML);
+        updateSymbol(
+          symbolInputValue,
+          sharesUpdate,
+          symbolList.children[i].children[4].innerHTML
+        );
+      }
+    }
+  } else {
+    addSymbol(symbolInputValue, sharesInputValue);
+  }
   symbolInput.value = '';
   sharesInput.value = '';
 });
 
 
-// THE FUNCTION BELOW ALLOWS US TO ADD DELETE BUTTONS TO OTHER ELEMENTS
-function appendDeleteBtnTo(element) {
-  var deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "Delete";
-  deleteButton.classList.add("delete");
-  deleteButton.addEventListener("click", listItemClickHandler);
-  element.appendChild(deleteButton);
-}
 
-
-
-// FUNCTION FOR TO BE USED IN THE EVENT HANDLER TO DELETE THE NEAREST LIST ITEM
-function listItemClickHandler(e) {
-  const li = e.target.closest('li');
-
-  if (!li) return;
-
-  if (e.target.matches('.delete')) {
-    li.remove();
-  } else {
-    return;
-  }
-}
-
-// FUNCTION THAT ALLOWS US TO LISTEN TO CLICKS ON A DELETE BUTTON
-// items.addEventListener("click", listItemClickHandler);
-
-function addSymbol(symbol, shares) {
-  fetch('/price?symbol=' + symbol)
-    .then((response) => response.json())
-    .then((data) => {
-      const symbolData = { ...data, shares };
-      symbols.push(symbolData);
-      drawList();
-      addSymbolToChart(symbolData);
-    });
-}
-
-function drawList() {
-  symbolList.innerHTML = '';
-  symbols.forEach((symbol) => {
-    const li = document.createElement('li');
-    li.innerText =
-      symbol.symbol +
-      ' ' +
-      symbol.shares +
-      ' x ' +
-      symbol.price +
-      '$ = ' +
-      round(symbol.price * symbol.shares) +
-      '$';
-    appendDeleteBtnTo(li)
-
-    symbolList.appendChild(li);
+const deleteSymbol = async (id) => {
+  const response = await fetch(`/api/stocks/${id}`, {
+    method: 'DELETE',
   });
-}
+  if (response.ok) {
+    window.location.replace('/dashboard');
+  }
+};
 
+const updateSymbol = async (symbol, shares, id) => {
+  if (symbol && shares) {
+    const response = await fetch(`/api/stocks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ symbol, shares, id }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    window.location.replace('/dashboard');
+  } else {
+    alert('Please enter both symbol and shares');
+  }
+};
 
+const addSymbol = async (symbol, shares) => {
+  if (symbol && shares) {
+    const response = await fetch(`/api/stocks`, {
+      method: 'POST',
+      body: JSON.stringify({ symbol, shares }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    window.location.replace('/dashboard');
+  } else {
+    alert('Please enter both symbol and shares');
+  }
+};
 
-function addSymbolToChart(symbol) {
-  myChart.data.labels.push(symbol.symbol);
-  myChart.data.datasets[0].data.push(round(symbol.shares * symbol.price));
-  myChart.data.datasets[0].backgroundColor.push(getRandomColor());
-  myChart.update();
-}
+const init = () => {
+  for (let i = 0; i < symbolList.children.length; i++) {
+    myChart.data.labels.push(symbolList.children[i].children[0].innerHTML);
+    myChart.data.datasets[0].data.push(
+      symbolList.children[i].children[3].innerHTML
+    );
+    myChart.data.datasets[0].backgroundColor.push(getRandomColor());
+    myChart.update();
+  }
+};
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF'.split('');
@@ -110,3 +149,5 @@ function getRandomColor() {
 function round(value) {
   return Math.round(value * 100) / 100;
 }
+
+init();
