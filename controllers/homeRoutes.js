@@ -31,9 +31,7 @@ router.get('/', (req, res) => {
           const price = quotes.financialData.currentPrice;
           const recommendationKey = quotes.financialData.recommendationKey;
           const ebitda = quotes.financialData.ebitda;
-          console.log(quotes.financialData);
           stocks.push({ symbol: symbol, price: price, ebitda: ebitda });
-          console.log('this is our data', stocks);
           if (i === symbols.length - 1) {
             res.render('homepage', {
               stocks,
@@ -107,6 +105,7 @@ router.get('/dashboard', withAuth, async (req, res) => {
     const stocks = await Promise.all(
       user.stocks.map(async (stock) => await addPriceToStock(stock))
     );
+
     res.render('dashboard', {
       stocks,
       logged_in: true,
